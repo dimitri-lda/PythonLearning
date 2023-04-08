@@ -15,6 +15,9 @@ Task8: It is required to determine whether it is possible to break off k slices 
 
 def task_2():
     num_str = input('Enter 3 digit number: ')
+    if len(num_str) != 3:
+        print('Invalid 3 digit number')
+        return
     sum_of_digits = sum_of_numbers(num_str)
     print('Sum of digits:', sum_of_digits)
 
@@ -36,6 +39,9 @@ def task_4():
 
 def task_6():
     num = input('Enter 6 digit number: ')
+    if len(num) != 6:
+        print('Invalid 6 digit number')
+        return
     first_part = sum_of_numbers(num[0:3])
     second_part = sum_of_numbers(num[3:6])
     if first_part == second_part:
@@ -46,8 +52,11 @@ def task_6():
 
 def task_8():
     print('Chocolate size')
-    params = input('Rows (m),  Columns (n), Request pieces (k): ').split()
-    if int(params[2]) % int(params[0]) == 0 or int(params[2]) % int(params[1]) == 0:
+    [m, n, k] = input('Rows (m),  Columns (n), Request pieces (k): ').split()
+    [m, n, k] = [int(m), int(n), int(k)]
+    if n * m < k:
+        print('no')
+    elif k % m == 0 or k % n == 0:
         print('yes')
     else:
         print('no')
