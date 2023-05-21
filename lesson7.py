@@ -14,6 +14,39 @@
 """
 
 
+def task_34():
+    poem = "пара-ра-рам рам-пам-папам па-ра-па-да"
+    # poem = input()
+    result = check_rhythm(poem)
+    print(result)
+
+
+def check_rhythm(poem):
+    lines = poem.split()
+    vowel_counts = list(map(count_vowels, lines))
+
+    if is_list_elements_equal(vowel_counts):
+        return "Парам пам-пам"
+    else:
+        return "Пам парам"
+
+
+def count_vowels(word):
+    i = 0
+    for letter in word:
+        if letter == 'а':
+            i += 1
+    return i
+
+
+def is_list_elements_equal(vowel_counts):
+    first_element = vowel_counts[0]
+    for element in vowel_counts[1:]:
+        if element != first_element:
+            return False
+    return True
+
+
 def task_36():
     two_dem_list = print_operation_table(lambda x, y: x * y)
     print_list(two_dem_list)
@@ -34,5 +67,5 @@ def print_list(two_dem_list):
         print(' '.join(map(str, row)))
 
 
+task_34()
 task_36()
-
