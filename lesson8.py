@@ -28,7 +28,12 @@ def show_menu():
           "2. Найти абонента по фамилии\n"
           "3. Найти абонента по номеру\n"
           "4. Добавить абонента\n"
-          "5. Сохранить справочник в текстовом формате\n")
+          "5. Сохранить справочник в текстовом формате\n"
+          "6. Удалить абонента по фамилии\n"
+          "7. Удалить абонента по номеру\n"
+          "8. Найти абонента по фамилии и обновить информацию\n"
+          "9. Найти абонента по номеру и обновить информацию\n"
+          )
     choice = int(input())
     return choice
 
@@ -60,23 +65,27 @@ def print_result(data: list):
         print('-' * 10)
 
 
-def get_search_name():
+def get_search_surname():
     return input('Фамилия: ')
 
 
-def find_by_name(data: list, name: str):
+def find_by_surname(data: list, surname: str):
     result = []
     for elem in data:
-        if elem['Фамилия'] == name:
+        if elem['Фамилия'] == surname:
             result.append(elem)
+    if not result:
+        print(f"Абонент с фамилией \"{surname}\" не найден.")
     return result
 
 
-def find_by_number(data: list, number: str):
+def find_by_number(data: list, phone_number: str):
     result = []
     for elem in data:
-        if elem['Телефон'] == number:
+        if elem['Телефон'] == phone_number:
             result.append(elem)
+    if not result:
+        print(f"Абонент с номером \"{phone_number}\" не найден.")
     return result
 
 
@@ -99,6 +108,44 @@ def write_csv(filename: str, data: list):
             f_out.write(f'{s[:-1]}\n')
 
 
+def delete_by_surname(data: list, name: str):
+    for elem in data:
+        if elem['Фамилия'] == name:
+            data.remove(elem)
+    return data
+
+
+def delete_by_phone_number(data: list, phone_number: str):
+    for elem in data:
+        if elem['Телефон'] == phone_number:
+            data.remove(elem)
+    return data
+
+
+def update_user_by_surname(data: list, surname: str):
+    for elem in data:
+        if elem['Фамилия'] == surname:
+            print_result([elem])
+            print("Введите новую информацию об абоненте:")
+            updated_data = input('Введите Фамилию, Имя, Номер, Описание: ').strip().split(',')
+            elem['Фамилия'], elem['Имя'], elem['Телефон'], elem['Описание'] = updated_data
+            break
+    else:
+        print(f"Абонент с фамилией \"{surname}\" не найден.")
+
+
+def update_user_phone_number(data: list, phone_number: str):
+    for elem in data:
+        if elem['Телефон'] == phone_number:
+            print_result([elem])
+            print("Введите новую информацию об абоненте:")
+            updated_data = input('Введите Фамилию, Имя, Номер, Описание: ').strip().split(',')
+            elem['Фамилия'], elem['Имя'], elem['Телефон'], elem['Описание'] = updated_data
+            break
+    else:
+        print(f"Абонент с номером \"{phone_number}\" не найден.")
+
+
 def work_with_phonebook():
     choice = show_menu()
     phone_book = read_csv('data/phonebook.csv')
@@ -107,17 +154,37 @@ def work_with_phonebook():
         if choice == 1:
             print_result(phone_book)
         elif choice == 2:
-            name = get_search_name()
-            print_result(find_by_name(phone_book, name))
+            surname = get_search_surname()
+            result = find_by_surname(phone_book, surname)
+            if result:
+                print_result(result)
         elif choice == 3:
-            num = input("номер: ")
-            print_result(find_by_number(phone_book, num))
+            phone_number = input("Номер телефона: ")
+            result = find_by_number(phone_book, phone_number)
+            if result:
+                print_result(result)
         elif choice == 4:
             new_user = get_new_user()
             add_user(phone_book, new_user)
             write_csv('data/phonebook.csv', phone_book)
         elif choice == 5:
             write_txt('data/phonebook.txt', phone_book)
+        elif choice == 6:
+            surname = get_search_surname()
+            delete_by_surname(phone_book, surname)
+            write_csv('data/phonebook.csv', phone_book)
+        elif choice == 7:
+            phone_number = input("Номер телефона: ")
+            delete_by_phone_number(phone_book, phone_number)
+            write_csv('data/phonebook.csv', phone_book)
+        elif choice == 8:
+            surname = get_search_surname()
+            update_user_by_surname(phone_book, surname)
+            write_csv('data/phonebook.csv', phone_book)
+        elif choice == 9:
+            phone_number = input("Номер телефона: ")
+            update_user_phone_number(phone_book, phone_number)
+            write_csv('data/phonebook.csv', phone_book)
         choice = show_menu()
 
 
